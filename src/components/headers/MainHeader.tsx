@@ -89,6 +89,7 @@ const SearchInput = styled(motion.input)`
   letter-spacing: 1.25px;
   font-size: 0.8rem;
   border-radius: 1px;
+  background-color: ${(props) => props.theme.colors.backgroundColor};
   &:focus {
     outline: none;
   }
@@ -114,7 +115,7 @@ function MainHeader() {
   const onSearchClick = () => setIsSearchOpened((previous) => !previous);
   const onSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(event);
+    console.info(event);
   };
   const { scrollY } = useViewportScroll();
   useEffect(() => {

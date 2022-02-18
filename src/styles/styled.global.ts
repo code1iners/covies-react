@@ -7,6 +7,11 @@ export const GlobalStyles = createGlobalStyle`
         box-sizing: border-box;
     }
 
+    body {
+        background-color: rgba(0, 0, 0, 1);
+        color: white;
+    }
+
     a {
         text-decoration: none;
         color: inherit;

@@ -7,10 +7,6 @@ import SearchPage from "./pages/SearchPage";
 import MainHeader from "./components/headers/MainHeader";
 import MoviePage from "./pages/MoviePage";
 
-const Container = styled.div`
-  margin-bottom: 70px;
-`;
-
 function App() {
   return (
     <Router>
