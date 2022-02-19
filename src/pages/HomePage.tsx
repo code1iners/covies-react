@@ -1,11 +1,14 @@
 import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import {
   QUERY_MOVIE_TOP_RATED,
   QUERY_MOVIE_TOP_RATED_KEY,
 } from "../api/graphql/movies/movieTopRated";
+import { ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING } from "../atoms/movies/atoms.movies.modals";
 import Loader from "../components/loadings/MovieLoader";
+import MovieRetrieveModal from "../components/modals/movies/MovieRetrieveModal";
 import HomeMainMovie from "../components/movies/HomeMainMovie";
 import useMovie from "../hooks/movies/useMovies";
 import ErrorMessageModal from "../modals/ErrorMessageModal";
@@ -22,9 +25,13 @@ const Container = styled.div`
 `;
 
 function HomePage() {
+  const movieRetrieveModalIsShowing = useRecoilValue(
+    ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING
+  );
+
   // Top rated start.
   const [topRated, setTopRated] = useState<MovieTopRatedResponse>();
-  const topRatedResponse: SimpleResponse<MovieTopRatedResponse> = useMovie({
+  const topRatedResponse = useMovie<SimpleResponse<MovieTopRatedResponse>>({
     key: QUERY_MOVIE_TOP_RATED_KEY,
     query: QUERY_MOVIE_TOP_RATED,
   });
@@ -42,6 +49,8 @@ function HomePage() {
       ) : topRatedResponse?.ok ? (
         <HomeMainMovie {...topRated?.results[0]} />
       ) : null}
+
+      {movieRetrieveModalIsShowing ? <MovieRetrieveModal /> : null}
     </Container>
   );
 }

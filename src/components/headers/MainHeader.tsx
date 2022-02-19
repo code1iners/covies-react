@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { motion, useAnimation, useViewportScroll } from "framer-motion";
-import { Link, useMatch } from "react-router-dom";
+import { Link, PathMatch, useMatch } from "react-router-dom";
 import { FormEvent, useEffect, useState } from "react";
 
 const Navigation = styled(motion.nav)`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 999;
+  z-index: 1;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -23,7 +23,11 @@ const Column = styled.div`
   align-items: center;
 `;
 
-const Logo = styled(motion.button)`
+interface ILogoProps {
+  isHome?: PathMatch<string> | null;
+}
+
+const Logo = styled(motion.button)<ILogoProps>`
   margin-right: 40px;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -110,8 +114,8 @@ function MainHeader() {
   const [isSearchOpened, setIsSearchOpened] = useState(false);
 
   const isHome = useMatch("/");
-  const isMovie = useMatch("/movies");
-  const isTv = useMatch("/tv");
+  const isMovie = useMatch("/movies/*");
+  const isTv = useMatch("/tv/*");
   const navAnimation = useAnimation();
 
   const onSearchClick = () => setIsSearchOpened((previous) => !previous);
@@ -138,13 +142,8 @@ function MainHeader() {
         </Link>
         <Links>
           <LinkItem>
-            <Link to="/">
-              Home {isHome ? <LinkItemIndicator layoutId="indicator" /> : null}
-            </Link>
-          </LinkItem>
-          <LinkItem>
             <Link to="movies">
-              Movie{" "}
+              Movie
               {isMovie ? <LinkItemIndicator layoutId="indicator" /> : null}
             </Link>
           </LinkItem>

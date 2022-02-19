@@ -3,6 +3,10 @@ import { MovieTopRatedProps } from "../../types/movies/movies.topRated";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import SquareButton from "../buttons/SquareButton";
 import GradientBackground from "../backgrounds/GradientBackground";
+import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING } from "../../atoms/movies/atoms.movies.modals";
+import { ATOM_MOVIE_SELECTED_ID } from "../../atoms/movies/atoms.movies.common";
 
 const HomeMain = styled.main`
   width: 100%;
@@ -25,7 +29,7 @@ const HomeMain = styled.main`
       ${(props) => props.theme.colors.backgroundColor},
       transparent
     );
-    z-index: 1000;
+    z-index: 0;
   }
 `;
 
@@ -68,7 +72,22 @@ const MovieImage = styled.img`
   opacity: 0.4;
 `;
 
-function HomeMainMovie({ title, overview, poster_path }: MovieTopRatedProps) {
+function HomeMainMovie({
+  title,
+  overview,
+  poster_path,
+  id,
+}: MovieTopRatedProps) {
+  const setMovieRetrieveModalIsShowing = useSetRecoilState(
+    ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING
+  );
+  const setMovieSelectedId = useSetRecoilState(ATOM_MOVIE_SELECTED_ID);
+
+  const onRetrieveClick = () => {
+    setMovieRetrieveModalIsShowing(true);
+    setMovieSelectedId(id);
+  };
+
   return (
     <HomeMain>
       {/* Title */}
@@ -78,7 +97,11 @@ function HomeMainMovie({ title, overview, poster_path }: MovieTopRatedProps) {
 
       {/* Footer Container */}
       <MovieFooterContainer>
-        <SquareButton icon={faInfoCircle} text="상세 정보" />
+        <SquareButton
+          icon={faInfoCircle}
+          text="상세 정보"
+          onClick={onRetrieveClick}
+        />
       </MovieFooterContainer>
 
       {/* Background */}

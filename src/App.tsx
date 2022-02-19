@@ -5,7 +5,7 @@ import HomePage from "./pages/HomePage";
 import TvPage from "./pages/TvPage";
 import SearchPage from "./pages/SearchPage";
 import MainHeader from "./components/headers/MainHeader";
-import MoviePage from "./pages/MoviePage";
+import MoviePage from "./pages/movies/MoviePage";
 
 function App() {
   return (
@@ -13,10 +13,12 @@ function App() {
       <MainHeader />
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/movies" element={<MoviePage />} />
-        <Route path="/tv" element={<TvPage />} />
-        <Route path="/search" element={<SearchPage />} />
+        <Route path="" element={<HomePage />} />
+
+        <Route path="movies" element={<MoviePage />} />
+
+        <Route path="tv" element={<TvPage />} />
+        <Route path="search" element={<SearchPage />} />
       </Routes>
     </Router>
   );

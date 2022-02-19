@@ -9,13 +9,17 @@ interface UseMovieProps {
   variables?: any;
 }
 
-export default function useMovies({ key, query, variables }: UseMovieProps) {
+export default function useMovies<T>({
+  key,
+  query,
+  variables,
+}: UseMovieProps): T | null {
   const {
     loading: responseLoading,
     error: responseError,
     data: responseData,
   } = useQuery(query, {
-    ...(variables && { ...variables }),
+    ...(variables && { variables }),
   });
 
   if (!responseData) return null;

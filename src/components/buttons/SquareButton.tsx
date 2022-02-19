@@ -26,17 +26,23 @@ const ButtonText = styled.span`
 interface ISquareButtonProps {
   icon: IconProp;
   text: string;
+  onClick?: () => any;
 }
 
 /**
  * ### Simple Square button.
  * @param icon FontAwesome icon's prop.
  * @param text Button text.
+ * @param onClick Button click handler.
  * @returns
  */
-export default function SquareButton({ icon, text }: ISquareButtonProps) {
+export default function SquareButton({
+  icon,
+  text,
+  onClick,
+}: ISquareButtonProps) {
   return (
-    <ButtonWrapper>
+    <ButtonWrapper onClick={onClick}>
       {/* Button icon */}
       <FontAwesomeIcon
         icon={icon}
