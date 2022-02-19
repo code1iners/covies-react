@@ -7,6 +7,7 @@ const Navigation = styled(motion.nav)`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 999;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -90,6 +91,7 @@ const SearchInput = styled(motion.input)`
   font-size: 0.8rem;
   border-radius: 1px;
   background-color: ${(props) => props.theme.colors.backgroundColor};
+  color: white;
   &:focus {
     outline: none;
   }
@@ -131,7 +133,9 @@ function MainHeader() {
   return (
     <Navigation variants={navVariants} initial="top" animate={navAnimation}>
       <Column>
-        <Logo>Covies</Logo>
+        <Link to="/">
+          <Logo>Covies</Logo>
+        </Link>
         <Links>
           <LinkItem>
             <Link to="/">

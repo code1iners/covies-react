@@ -1,18 +1,49 @@
 import { useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { QUERY_COVIE_HELLO } from "../api/graphql/shared";
+import {
+  QUERY_MOVIE_TOP_RATED,
+  QUERY_MOVIE_TOP_RATED_KEY,
+} from "../api/graphql/movies/movieTopRated";
+import Loader from "../components/loadings/MovieLoader";
+import HomeMainMovie from "../components/movies/HomeMainMovie";
+import useMovie from "../hooks/movies/useMovies";
+import ErrorMessageModal from "../modals/ErrorMessageModal";
+import {
+  MovieTopRatedProps,
+  MovieTopRatedResponse,
+} from "../types/movies/movies.topRated";
+import { SimpleResponse } from "../types/shared/shared";
 
 const Container = styled.div`
-  height: 200vh;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
 `;
 
 function HomePage() {
-  console.log(process.env.REACT_APP_GATE_WAY_URI);
+  // Top rated start.
+  const [topRated, setTopRated] = useState<MovieTopRatedResponse>();
+  const topRatedResponse: SimpleResponse<MovieTopRatedResponse> = useMovie({
+    key: QUERY_MOVIE_TOP_RATED_KEY,
+    query: QUERY_MOVIE_TOP_RATED,
+  });
 
-  const { loading, error, data } = useQuery(QUERY_COVIE_HELLO);
-  console.log(data);
+  useEffect(() => {
+    if (topRatedResponse?.ok) setTopRated(topRatedResponse.data);
+  }, [topRatedResponse]);
+  // Top rated end.
 
-  return <Container>Home</Container>;
+  return (
+    <Container>
+      {/* Home's main content */}
+      {topRatedResponse?.error ? (
+        <ErrorMessageModal message={topRatedResponse?.error.message} />
+      ) : topRatedResponse?.ok ? (
+        <HomeMainMovie {...topRated?.results[0]} />
+      ) : null}
+    </Container>
+  );
 }
 
 export default HomePage;
