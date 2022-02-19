@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { MovieTopRatedProps } from "../../types/movies/movies.topRated";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import SquareButton from "../buttons/SquareButton";
+import GradientBackground from "../backgrounds/GradientBackground";
 
 const HomeMain = styled.main`
   width: 100%;
@@ -44,27 +45,6 @@ const MovieFooterContainer = styled.div`
   margin-top: 20px;
 `;
 
-const SquareButton = styled.div`
-  cursor: pointer;
-  padding: 7px;
-  border-radius: 5px;
-  background-color: ${(props) => props.theme.colors.backgroundColor};
-  transition: 0.2s ease-in-out;
-  &:hover {
-    color: ${(props) => props.theme.colors.sexyRed};
-    transform: scale(1.1);
-  }
-`;
-
-const ButtonText = styled.span`
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
-  font-size: 0.8rem;
-  letter-spacing: 1.2px;
-  font-weight: 500;
-`;
-
 const MovieImageWrapper = styled.div`
   position: absolute;
   top: 0;
@@ -88,45 +68,20 @@ const MovieImage = styled.img`
   opacity: 0.4;
 `;
 
-const GradientBackground = styled.div`
-  position: absolute;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
-  background: #141e30; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #243b55,
-    #141e30
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #243b55,
-    #141e30
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-`;
-
 function HomeMainMovie({ title, overview, poster_path }: MovieTopRatedProps) {
   return (
     <HomeMain>
+      {/* Title */}
       <MovieTitle>{title}</MovieTitle>
+      {/* Overview */}
       <MovieOverview>{overview}</MovieOverview>
 
+      {/* Footer Container */}
       <MovieFooterContainer>
-        <SquareButton>
-          {/* Button icon */}
-          <FontAwesomeIcon
-            icon={faInfoCircle}
-            style={{
-              marginRight: 10,
-            }}
-            size="sm"
-          />
-          {/* Button text */}
-          <ButtonText>상세 정보</ButtonText>
-        </SquareButton>
+        <SquareButton icon={faInfoCircle} text="상세 정보" />
       </MovieFooterContainer>
 
+      {/* Background */}
       <MovieImageWrapper>
         {poster_path ? (
           <MovieImage

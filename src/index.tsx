@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import { ThemeProvider } from "styled-components";
 import App from "./App";
 import { GlobalStyles } from "./styles/styled.global";
-import { lightTheme, darkTheme } from "./styles/theme";
+import { lightTheme, darkTheme } from "./styles/themes";
 import { client } from "./utils/client";
 
 ReactDOM.render(
