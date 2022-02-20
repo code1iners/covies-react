@@ -1,4 +1,3 @@
-import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
@@ -8,7 +7,7 @@ import {
 } from "../api/graphql/movies/movieTopRated";
 import { ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING } from "../atoms/movies/atoms.movies.modals";
 import Loader from "../components/loadings/MovieLoader";
-import MovieRetrieveModal from "../components/modals/movies/MovieRetrieveModal";
+import MovieRetrieveModal from "../components/modals/movies/retrieves/MovieRetrieveModal";
 import HomeMainMovie from "../components/movies/HomeMainMovie";
 import useMovie from "../hooks/movies/useMovies";
 import ErrorMessageModal from "../modals/ErrorMessageModal";
