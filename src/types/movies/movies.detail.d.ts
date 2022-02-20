@@ -21,7 +21,7 @@ export interface IMovieDetailSpokenLanguage {
   name: string;
 }
 
-export interface IMovieDetailResponse {
+export interface IMovieDetailResult {
   adult: boolean;
   backdrop_path: string;
   belongs_to_collection: string;

@@ -15,10 +15,16 @@ const Container = styled.div`
   align-items: center;
   border-radius: 15px;
   cursor: pointer;
+  transition: 0.2s ease-in-out;
+  &:hover {
+    transform: scale(0.9);
+    color: ${(props) => props.theme.colors.sexyRed};
+    border-radius: 5px;
+  }
 `;
 
 interface ICircleCloseButtonProps {
-  onCloseClick: () => void;
+  onCloseClick: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 export default function CircleCloseButton({

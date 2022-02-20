@@ -1,8 +1,9 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
-const ButtonWrapper = styled.div`
+const ButtonWrapper = styled(motion.div)`
   cursor: pointer;
   padding: 7px;
   border-radius: 5px;

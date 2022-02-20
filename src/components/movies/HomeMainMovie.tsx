@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { MovieTopRatedProps } from "../../types/movies/movies.topRated";
+import { MovieTopRatedResult } from "../../types/movies/movies.topRated";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import SquareButton from "../buttons/SquareButton";
 import GradientBackground from "../backgrounds/GradientBackground";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING } from "../../atoms/movies/atoms.movies.modals";
 import { ATOM_MOVIE_SELECTED_ID } from "../../atoms/movies/atoms.movies.common";
 
@@ -77,10 +77,9 @@ function HomeMainMovie({
   overview,
   poster_path,
   id,
-}: MovieTopRatedProps) {
-  const setMovieRetrieveModalIsShowing = useSetRecoilState(
-    ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING
-  );
+}: MovieTopRatedResult) {
+  const [movieRetrieveModalIsShowing, setMovieRetrieveModalIsShowing] =
+    useRecoilState(ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING);
   const setMovieSelectedId = useSetRecoilState(ATOM_MOVIE_SELECTED_ID);
 
   const onRetrieveClick = () => {

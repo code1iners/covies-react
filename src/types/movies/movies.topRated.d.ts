@@ -1,4 +1,4 @@
-export interface MovieTopRatedProps {
+export interface MovieTopRatedResult {
   poster_path?: string;
   adult?: boolean;
   overview?: string;
@@ -17,7 +17,7 @@ export interface MovieTopRatedProps {
 
 export interface MovieTopRatedResponse {
   page: number;
-  results: MovieTopRatedProps[];
+  results: MovieTopRatedResult[];
   total_results: number;
   total_pages: number;
 }

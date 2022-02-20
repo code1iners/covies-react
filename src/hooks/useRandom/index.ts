@@ -36,7 +36,13 @@ export default function useRandom(): IUseRandomResult {
     };
   };
 
+  const getRandomly = (list: any[]) => {
+    const selectedIndex = Math.floor(Math.random() * list.length);
+    return list[selectedIndex];
+  };
+
   return {
     useGradient,
+    getRandomly,
   };
 }

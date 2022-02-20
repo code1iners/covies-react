@@ -10,9 +10,10 @@ import Loader from "../components/loadings/MovieLoader";
 import MovieRetrieveModal from "../components/modals/movies/retrieves/MovieRetrieveModal";
 import HomeMainMovie from "../components/movies/HomeMainMovie";
 import useMovie from "../hooks/movies/useMovies";
+import useRandom from "../hooks/useRandom";
 import ErrorMessageModal from "../modals/ErrorMessageModal";
 import {
-  MovieTopRatedProps,
+  MovieTopRatedResult,
   MovieTopRatedResponse,
 } from "../types/movies/movies.topRated";
 import { SimpleResponse } from "../types/shared/shared";
@@ -24,20 +25,28 @@ const Container = styled.div`
 `;
 
 function HomePage() {
+  const { getRandomly } = useRandom();
+
   const movieRetrieveModalIsShowing = useRecoilValue(
     ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING
   );
 
   // Top rated start.
-  const [topRated, setTopRated] = useState<MovieTopRatedResponse>();
+  const [topRatedData, setTopRatedData] = useState<MovieTopRatedResponse>();
+  const [randomlyTopRatedData, setRandomlyTopRatedData] =
+    useState<MovieTopRatedResult>();
   const topRatedResponse = useMovie<SimpleResponse<MovieTopRatedResponse>>({
     key: QUERY_MOVIE_TOP_RATED_KEY,
     query: QUERY_MOVIE_TOP_RATED,
   });
 
   useEffect(() => {
-    if (topRatedResponse?.ok) setTopRated(topRatedResponse.data);
+    if (topRatedResponse?.ok) {
+      setTopRatedData(topRatedResponse.data);
+      setRandomlyTopRatedData(getRandomly(topRatedResponse.data!.results));
+    }
   }, [topRatedResponse]);
+
   // Top rated end.
 
   return (
@@ -46,7 +55,7 @@ function HomePage() {
       {topRatedResponse?.error ? (
         <ErrorMessageModal message={topRatedResponse?.error.message} />
       ) : topRatedResponse?.ok ? (
-        <HomeMainMovie {...topRated?.results[0]} />
+        <HomeMainMovie {...randomlyTopRatedData} />
       ) : null}
 
       {movieRetrieveModalIsShowing ? <MovieRetrieveModal /> : null}

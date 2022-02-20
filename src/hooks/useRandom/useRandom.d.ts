@@ -1,6 +1,7 @@
 // useRandom start.
 export interface IUseRandomResult {
   useGradient: () => IUseGradientResult;
+  getRandomly: (list: any[]) => any;
 }
 // useRandom end.
 
