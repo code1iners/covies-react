@@ -28,7 +28,6 @@ interface ILogoProps {
 }
 
 const Logo = styled(motion.button)<ILogoProps>`
-  margin-right: 40px;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   font-weight: bolder;
@@ -47,6 +46,7 @@ const Links = styled.ul`
   display: flex;
   align-items: center;
   grid-gap: 30px;
+  margin-left: 40px;
 `;
 
 const LinkItem = styled.li`
@@ -60,6 +60,10 @@ const LinkItem = styled.li`
   a {
     display: flex;
     justify-content: center;
+  }
+  &:hover {
+    color: ${(props) => props.theme.colors.sexyRed};
+    transform: scale(1.05);
   }
 `;
 
@@ -137,22 +141,25 @@ function MainHeader() {
   return (
     <Navigation variants={navVariants} initial="top" animate={navAnimation}>
       <Column>
+        {/* Logo */}
         <Link to="/">
           <Logo>Covies</Logo>
         </Link>
-        <Links>
+
+        {/* Menu */}
+        {/* <Links>
           <LinkItem>
             <Link to="movies">
-              Movie
+              영화
               {isMovie ? <LinkItemIndicator layoutId="indicator" /> : null}
             </Link>
           </LinkItem>
           <LinkItem>
             <Link to="tv">
-              Tv {isTv ? <LinkItemIndicator layoutId="indicator" /> : null}
+              TV {isTv ? <LinkItemIndicator layoutId="indicator" /> : null}
             </Link>
           </LinkItem>
-        </Links>
+        </Links> */}
       </Column>
 
       <Column>

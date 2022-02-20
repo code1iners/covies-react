@@ -20,6 +20,7 @@ export default function MovieRetrieveModalRecommendations({
       <ContentWrapper>
         {recommendations.map((recommendation, index) => (
           <ContentCard
+            key={index}
             index={index}
             overview={recommendation.overview}
             title={recommendation.title}

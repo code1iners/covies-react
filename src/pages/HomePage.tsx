@@ -6,7 +6,6 @@ import {
   QUERY_MOVIE_TOP_RATED_KEY,
 } from "../api/graphql/movies/movieTopRated";
 import { ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING } from "../atoms/movies/atoms.movies.modals";
-import Loader from "../components/loadings/MovieLoader";
 import MovieRetrieveModal from "../components/modals/movies/retrieves/MovieRetrieveModal";
 import HomeMainMovie from "../components/movies/HomeMainMovie";
 import useMovie from "../hooks/movies/useMovies";
@@ -51,6 +50,8 @@ function HomePage() {
 
   return (
     <Container>
+      {/* Head */}
+
       {/* Home's main content */}
       {topRatedResponse?.error ? (
         <ErrorMessageModal message={topRatedResponse?.error.message} />

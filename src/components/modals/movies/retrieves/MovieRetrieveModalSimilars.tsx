@@ -25,6 +25,7 @@ export default function MovieRetrieveModalSimilars({
       <ListWrapper>
         {similars.results.map((result, index) => (
           <ContentCard
+            key={index}
             index={index}
             overview={result.overview}
             title={result.title}
