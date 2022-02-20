@@ -38,6 +38,10 @@ const MovieThumbnailTitle = styled.h1`
   letter-spacing: 2px;
   transform: translateY(100px);
   cursor: default;
+  transition: 0.2s ease-in-out;
+  &:hover {
+    color: gold;
+  }
 `;
 
 interface IMovieRetrieveModalThumbnailProps {

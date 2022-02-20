@@ -15,10 +15,10 @@ import MovieRetrieveModalThumbnail from "./MovieRetrieveModalThumbnail";
 import MovieRetrieveModalDescription from "./MovieRetrieveModalDescription";
 import { IMovieSimilarsResponse } from "../../../../types/movies/movies.similars";
 import { QUERY_MOVIE_SIMILARS } from "../../../../api/graphql/movies/movieSimilars";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 import MovieRetrieveModalSimilars from "./MovieRetrieveModalSimilars";
+import { QUERY_MOVIE_RECOMMENDATIONS } from "../../../../api/graphql/movies/movieRecommendations";
+import MovieRetrieveModalRecommendations from "./MovieRetrieveModalRecommendations";
 
 const Overlay = styled.div`
   position: absolute;
@@ -47,63 +47,20 @@ const Container = styled(motion.div)`
 `;
 
 export default function MovieRetrieveModal() {
+  // Recoils.
   const setMovieRetrieveModalIsShowing = useSetRecoilState(
     ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING
   );
   const [movieSelectedId, setMovieSelectedId] = useRecoilState(
     ATOM_MOVIE_SELECTED_ID
   );
+
+  // States.
   const [movie, setMovie] = useState<IMovieDetailResult>();
   const [credits, setCredits] = useState<IMovieCreditsResponse>();
   const [similars, setSimilars] = useState<IMovieSimilarsResponse>();
-
-  // Movie start.
-
-  const movieResponse = useMovies<SimpleResponse<IMovieDetailResult>>({
-    key: "movieDetail",
-    query: QUERY_MOVIE_DETAIL,
-    variables: { movieId: Number(movieSelectedId) },
-  });
-
-  useEffect(() => {
-    if (movieResponse?.ok) {
-      setMovie(movieResponse.data);
-    }
-  }, [movieResponse]);
-
-  // Movie end.
-
-  // Credits start.
-
-  const creditsResponse = useMovies<SimpleResponse<IMovieCreditsResponse>>({
-    key: "movieCredits",
-    query: QUERY_MOVIE_CREDITS,
-    variables: { movieId: Number(movieSelectedId) },
-  });
-
-  useEffect(() => {
-    if (creditsResponse?.ok) {
-      setCredits(creditsResponse.data);
-    }
-  }, [creditsResponse]);
-
-  // Credits end.
-
-  // Similar start.
-
-  const similarsResponse = useMovies<SimpleResponse<IMovieSimilarsResponse>>({
-    key: "movieSimilars",
-    query: QUERY_MOVIE_SIMILARS,
-    variables: { movieId: Number(movieSelectedId) },
-  });
-
-  useEffect(() => {
-    if (similarsResponse?.ok) {
-      setSimilars(similarsResponse.data);
-    }
-  }, [similarsResponse]);
-
-  // Similar end.
+  const [recommendations, setRecommendations] =
+    useState<IMovieRecommendationsResponse>();
 
   /**
    * ### Close movie retrieve modal.
@@ -127,6 +84,75 @@ export default function MovieRetrieveModal() {
     setMovieSelectedId(undefined);
   };
 
+  // Movie start.
+
+  const movieResponse = useMovies<SimpleResponse<IMovieDetailResult>>({
+    key: "movieDetail",
+    query: QUERY_MOVIE_DETAIL,
+    variables: { movieId: Number(movieSelectedId) },
+  });
+
+  useEffect(() => {
+    if (movieResponse?.ok) {
+      setMovie(movieResponse.data);
+      console.log("movie", movieResponse.data);
+    }
+  }, [movieResponse]);
+
+  // Movie end.
+
+  // Credits start.
+
+  const creditsResponse = useMovies<SimpleResponse<IMovieCreditsResponse>>({
+    key: "movieCredits",
+    query: QUERY_MOVIE_CREDITS,
+    variables: { movieId: Number(movieSelectedId) },
+  });
+
+  useEffect(() => {
+    if (creditsResponse?.ok) {
+      setCredits(creditsResponse.data);
+      console.log("credits", creditsResponse.data);
+    }
+  }, [creditsResponse]);
+
+  // Credits end.
+
+  // Similar start.
+
+  const similarsResponse = useMovies<SimpleResponse<IMovieSimilarsResponse>>({
+    key: "movieSimilars",
+    query: QUERY_MOVIE_SIMILARS,
+    variables: { movieId: Number(movieSelectedId) },
+  });
+
+  useEffect(() => {
+    if (similarsResponse?.ok) {
+      setSimilars(similarsResponse.data);
+    }
+  }, [similarsResponse]);
+
+  // Similar end.
+
+  // Recommendations start.
+
+  const recommendationsResponse = useMovies<
+    SimpleResponse<IMovieRecommendationsResponse>
+  >({
+    key: "movieRecommendations",
+    query: QUERY_MOVIE_RECOMMENDATIONS,
+    variables: { movieId: Number(movieSelectedId) },
+  });
+
+  useEffect(() => {
+    if (recommendationsResponse?.ok) {
+      setRecommendations(recommendationsResponse?.data);
+      console.log("recommendations", recommendationsResponse?.data);
+    }
+  }, [recommendationsResponse]);
+
+  // Recommendations end.
+
   return (
     <Overlay onClick={onOverlayClick}>
       <Container
@@ -141,7 +167,7 @@ export default function MovieRetrieveModal() {
         {movie ? (
           <MovieRetrieveModalThumbnail
             title={movie.title}
-            posterPath={movie.poster_path}
+            posterPath={movie.backdrop_path}
           />
         ) : (
           <MovieLoader />
@@ -157,6 +183,15 @@ export default function MovieRetrieveModal() {
         {/* Similars */}
         {similars ? (
           <MovieRetrieveModalSimilars similars={similars} />
+        ) : (
+          <MovieLoader />
+        )}
+
+        {/* Recommendations */}
+        {recommendations ? (
+          <MovieRetrieveModalRecommendations
+            recommendations={recommendations.results}
+          />
         ) : (
           <MovieLoader />
         )}

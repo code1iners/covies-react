@@ -20,6 +20,7 @@ const Container = styled.div`
     transform: scale(0.9);
     color: ${(props) => props.theme.colors.sexyRed};
     border-radius: 5px;
+    border: 1px solid white;
   }
 `;
 

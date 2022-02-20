@@ -5,6 +5,7 @@ import {
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 import styled from "styled-components";
 import { IMovieCreditsCast } from "../../../../types/movies/movies.credits";
 import {
@@ -72,7 +73,7 @@ const MovieDescriptionText = styled.span`
   font-weight: lighter;
 `;
 
-const MovieDescriptionCastMore = styled.a`
+const MovieDescriptionCastMore = styled.span`
   font-size: 0.8rem;
   margin-left: 4;
   font-weight: normal;
@@ -88,9 +89,14 @@ export default function MovieRetrieveModalDescription({
   casts,
   movie,
 }: IMovieRetrieveModalDescriptionProps) {
+  const [more, setMore] = useState(false);
+
   const getCastNamesWithCount = (count: number) => {
     const converted = casts.map((cast) => cast.name);
-    const slicedList = converted?.slice(0, count);
+    const slicedList = converted?.slice(
+      0,
+      count === 0 ? converted.length : count
+    );
     const result = slicedList?.join(", ");
     return result;
   };
@@ -156,8 +162,27 @@ export default function MovieRetrieveModalDescription({
         <MovieDescriptionTextWrapper>
           <MovieDescriptionLabel>출연 :</MovieDescriptionLabel>
           <MovieDescriptionText>
-            {getCastNamesWithCount(3)}
-            <MovieDescriptionCastMore> 더 보기</MovieDescriptionCastMore>
+            {more ? (
+              <>
+                {getCastNamesWithCount(0)}
+                <MovieDescriptionCastMore
+                  onClick={() => setMore((previous) => !previous)}
+                >
+                  {" "}
+                  숨기기
+                </MovieDescriptionCastMore>
+              </>
+            ) : (
+              <>
+                {getCastNamesWithCount(10)}
+                <MovieDescriptionCastMore
+                  onClick={() => setMore((previous) => !previous)}
+                >
+                  {" "}
+                  더 보기
+                </MovieDescriptionCastMore>
+              </>
+            )}
           </MovieDescriptionText>
         </MovieDescriptionTextWrapper>
         {/* Genres */}
