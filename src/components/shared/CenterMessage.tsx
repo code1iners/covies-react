@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const CenterMessageWrapper = styled.div`
+  width: 100%;
   padding: 30px;
   display: flex;
   justify-content: center;
@@ -16,13 +17,13 @@ const CenterMessageText = styled.span`
 `;
 
 interface ICenterMessageProps {
-  text: string;
+  text?: string;
 }
 
 export default function CenterMessage({ text }: ICenterMessageProps) {
   return (
     <CenterMessageWrapper>
-      <CenterMessageText>{text}</CenterMessageText>
+      <CenterMessageText>{text ? text : "Error"}</CenterMessageText>
     </CenterMessageWrapper>
   );
 }

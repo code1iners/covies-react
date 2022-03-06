@@ -3,15 +3,15 @@ import { MovieTopRatedResult } from "../../types/movies/movies.topRated";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import SquareButton from "../buttons/SquareButton";
 import GradientBackground from "../backgrounds/GradientBackground";
-import { useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING } from "../../atoms/movies/atoms.movies.modals";
 import { ATOM_MOVIE_SELECTED_ID } from "../../atoms/movies/atoms.movies.common";
+import { makeContentImagePath } from "../../utils/imageUtils";
 
 const HomeMain = styled.main`
   width: 100%;
   height: 90vh;
-  position: absolute;
+  position: relative;
   top: 0;
   display: flex;
   flex-direction: column;
@@ -106,9 +106,7 @@ function HomeMainMovie({
       {/* Background */}
       <MovieImageWrapper>
         {poster_path ? (
-          <MovieImage
-            src={`${process.env.REACT_APP_TMDB_IMAGE_BASE_NOT_ORIGINAL}/${poster_path}`}
-          />
+          <MovieImage src={makeContentImagePath(poster_path)} />
         ) : (
           <GradientBackground />
         )}
