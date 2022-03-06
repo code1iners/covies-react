@@ -13,9 +13,23 @@ import {
   MovieTopRatedResult,
   MovieTopRatedResponse,
 } from "../types/movies/movies.topRated";
-import { motion } from "framer-motion";
 import HorizontalContents from "../components/home/HorizontalContents";
 import { ATOM_MOVIE_SELECTED_ID } from "../atoms/movies/atoms.movies.common";
+import {
+  IMoviePopularsResponse,
+  QUERY_MOVIE_POPULARS,
+  QUERY_MOVIE_POPULARS_KEY,
+} from "../api/graphql/movies/moviePopulars";
+import {
+  IMovieUpcomingResponse,
+  QUERY_MOVIE_UPCOMING,
+  QUERY_MOVIE_UPCOMING_KEY,
+} from "../api/graphql/movies/movieUpcomings";
+import {
+  IMovieNowPlayingResponse,
+  QUERY_MOVIE_NOW_PLAYING,
+  QUERY_MOVIE_NOW_PLAYING_KEY,
+} from "../api/graphql/movies/movieNowPlayings";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -25,122 +39,6 @@ const Container = styled.div`
   padding-bottom: 100px;
 `;
 
-// Top rated start.
-
-const TopRatedContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`;
-const TopRatedTitle = styled.h3`
-  margin: 0 60px;
-`;
-
-const TopRatedListWrapper = styled.section`
-  width: 100%;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  position: relative;
-`;
-
-const TopRatedRowWrapper = styled.div`
-  flex: 1;
-  width: 100%;
-  position: relative;
-  height: 200px;
-  display: flex;
-  align-items: center;
-`;
-
-const TopRatedRow = styled(motion.div)`
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  position: absolute;
-  width: 100%;
-`;
-
-const TopRatedItemBox = styled(motion.div)`
-  transition: 0.2s ease-in-out;
-  border-radius: 5px;
-  overflow: hidden;
-  background-color: ${(props) => props.theme.colors.backgroundColor};
-  cursor: pointer;
-  &:hover {
-    /* transform: scale(1.05); */
-  }
-  &:first-child {
-    transform-origin: left;
-  }
-  &:last-child {
-    transform-origin: right;
-  }
-`;
-const TopRatedThumbnail = styled.div<{ imagePath: string | undefined }>`
-  height: 130px;
-  width: 100%;
-  background-image: url(${(props) => props.imagePath});
-  background-position: center;
-  background-size: cover;
-`;
-
-const TopRatedTextBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  padding: 3px;
-  margin-top: 5px;
-`;
-const TopRatedItemTitle = styled.span``;
-const TopRatedItemAverage = styled.span``;
-
-const Arrow = styled.div`
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 6px 12px;
-  border: 1px solid gray;
-  border-radius: 5px;
-  transition: border-color 0.2s ease-in-out;
-  z-index: 2;
-  background-color: ${(props) => props.theme.colors.backgroundColor};
-  &:hover {
-    border-color: white;
-  }
-`;
-const PreviousArrow = styled(Arrow)``;
-const NextArrow = styled(Arrow)``;
-
-// Variants
-const TopRatedRowVariants = {
-  invisible: {
-    x: window.outerWidth + 10,
-  },
-  visible: {
-    x: 0,
-  },
-  exit: {
-    x: -window.outerWidth - 10,
-  },
-};
-const TopRatedBoxVariants = {
-  normal: {
-    scale: 1,
-  },
-  hover: {
-    scale: 1.2,
-    y: -10,
-    transition: {
-      type: "tween",
-      delay: 0.5,
-      duration: 0,
-    },
-  },
-};
-
 // Top rated end.
 
 function HomePage() {
@@ -148,29 +46,73 @@ function HomePage() {
 
   // Data.
 
-  const topRatedResponse = useMovies<MovieTopRatedResponse>({
+  // Movies top rated.
+  const topRatedMoviesResponse = useMovies<MovieTopRatedResponse>({
     key: QUERY_MOVIE_TOP_RATED_KEY,
     query: QUERY_MOVIE_TOP_RATED,
   });
 
-  console.log(topRatedResponse);
+  // Movies populars.
+  const popularMoviesResponse = useMovies<IMoviePopularsResponse>({
+    key: QUERY_MOVIE_POPULARS_KEY,
+    query: QUERY_MOVIE_POPULARS,
+  });
+
+  // Movies upcomings.
+  const upcomingMoviesResponse = useMovies<IMovieUpcomingResponse>({
+    key: QUERY_MOVIE_UPCOMING_KEY,
+    query: QUERY_MOVIE_UPCOMING,
+  });
+
+  // Movies now playings.
+  const nowPlayingMoviesResponse = useMovies<IMovieNowPlayingResponse>({
+    key: QUERY_MOVIE_NOW_PLAYING_KEY,
+    query: QUERY_MOVIE_NOW_PLAYING,
+  });
+
+  console.log(nowPlayingMoviesResponse);
+
+  // console.log(latestResponse);
 
   // States.
 
   const [topRatedMovies, setTopRatedMovies] = useState<MovieTopRatedResponse>();
   const [randomTopRatedMovie, setRandomTopRatedMovie] =
     useState<MovieTopRatedResult>();
+  const [popularMovies, setPopularMovies] = useState<IMoviePopularsResponse>();
+  const [upcomingMovies, setUpcomingMovies] =
+    useState<IMovieUpcomingResponse>();
+  const [nowPlayingMovies, setNowPlayingMovies] =
+    useState<IMovieNowPlayingResponse>();
 
   const movieRetrieveModalIsShowing = useRecoilValue(ATOM_MOVIE_SELECTED_ID);
 
   // Observers.
 
   useEffect(() => {
-    if (topRatedResponse) {
-      setTopRatedMovies(topRatedResponse);
-      setRandomTopRatedMovie(getRandomly(topRatedResponse.results));
+    if (topRatedMoviesResponse) {
+      setTopRatedMovies(topRatedMoviesResponse);
+      setRandomTopRatedMovie(getRandomly(topRatedMoviesResponse.results));
     }
-  }, [topRatedResponse]);
+  }, [topRatedMoviesResponse, popularMoviesResponse]);
+
+  useEffect(() => {
+    if (popularMoviesResponse) {
+      setPopularMovies(popularMoviesResponse);
+    }
+  }, [popularMoviesResponse]);
+
+  useEffect(() => {
+    if (upcomingMoviesResponse) {
+      setUpcomingMovies(upcomingMoviesResponse);
+    }
+  }, [upcomingMoviesResponse]);
+
+  useEffect(() => {
+    if (nowPlayingMoviesResponse) {
+      setNowPlayingMovies(nowPlayingMoviesResponse);
+    }
+  }, [nowPlayingMoviesResponse]);
 
   return (
     <Container>
@@ -182,6 +124,15 @@ function HomePage() {
         title="최고 평점 영화"
         list={topRatedMovies?.results}
       />
+
+      {/* Populars */}
+      <HorizontalContents title="인기 영화" list={popularMovies?.results} />
+
+      {/* Upcomings */}
+      <HorizontalContents title="개봉 예정작" list={upcomingMovies?.results} />
+
+      {/* Now playings */}
+      <HorizontalContents title="상영작" list={nowPlayingMovies?.results} />
 
       {/* Modals */}
       {movieRetrieveModalIsShowing ? <MovieRetrieveModal /> : null}

@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+export const QUERY_MOVIE_LATEST_KEY = "movieLatest";
 export const QUERY_MOVIE_LATEST = gql`
   query movieLatest {
     movieLatest {

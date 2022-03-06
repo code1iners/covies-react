@@ -11,6 +11,7 @@ import { makeContentImagePath } from "../../utils/imageUtils";
 const Container = styled.div`
   width: 100%;
   padding: 20px;
+  overflow: hidden;
 `;
 
 const Header = styled.header`
@@ -211,10 +212,12 @@ const HorizontalContents = ({ title, list = [] }: IHorizontalContentsProps) => {
                   <ItemThumbnail
                     imageUrl={makeContentImagePath(page.poster_path, "w500")}
                   />
-                  <ItemInfoWrapper>
-                    <span>{page.title}</span>
-                    <span>{page.vote_average}</span>
-                  </ItemInfoWrapper>
+                  {page.title ? (
+                    <ItemInfoWrapper>
+                      <span>{page.title}</span>
+                      <span>{page.vote_average}</span>
+                    </ItemInfoWrapper>
+                  ) : null}
                 </Column>
               ))}
             </Row>

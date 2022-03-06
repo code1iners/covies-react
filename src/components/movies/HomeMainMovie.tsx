@@ -10,7 +10,7 @@ import { makeContentImagePath } from "../../utils/imageUtils";
 
 const HomeMain = styled.main`
   width: 100%;
-  height: 90vh;
+  height: 80vh;
   position: relative;
   top: 0;
   display: flex;
