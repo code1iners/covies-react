@@ -15,20 +15,20 @@ import MovieRetrieveModalThumbnail from "./MovieRetrieveModalThumbnail";
 import MovieRetrieveModalDescription from "./MovieRetrieveModalDescription";
 import { IMovieSimilarsResponse } from "../../../../types/movies/movies.similars";
 import { QUERY_MOVIE_SIMILARS } from "../../../../api/graphql/movies/movieSimilars";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import MovieRetrieveModalSimilars from "./MovieRetrieveModalSimilars";
 import { QUERY_MOVIE_RECOMMENDATIONS } from "../../../../api/graphql/movies/movieRecommendations";
 import MovieRetrieveModalRecommendations from "./MovieRetrieveModalRecommendations";
 
 const Overlay = styled.div`
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 4;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
 `;
 
 const Container = styled(motion.div)`
@@ -45,6 +45,19 @@ const Container = styled(motion.div)`
     display: none;
   }
 `;
+
+// Variants.
+const ContainerVariants = {
+  idle: {
+    scale: 0.3,
+    rotateZ: 30,
+  },
+  in: {
+    scale: 1,
+    rotateZ: 0,
+  },
+  out: {},
+};
 
 export default function MovieRetrieveModal() {
   // Recoils.
@@ -86,16 +99,16 @@ export default function MovieRetrieveModal() {
 
   // Movie start.
 
-  const movieResponse = useMovies<SimpleResponse<IMovieDetailResult>>({
+  const movieResponse = useMovies<IMovieDetailResult>({
     key: "movieDetail",
     query: QUERY_MOVIE_DETAIL,
     variables: { movieId: Number(movieSelectedId) },
   });
 
   useEffect(() => {
-    if (movieResponse?.ok) {
-      setMovie(movieResponse.data);
-      console.log("movie", movieResponse.data);
+    if (movieResponse) {
+      setMovie(movieResponse);
+      console.log("movie", movieResponse);
     }
   }, [movieResponse]);
 
@@ -103,16 +116,16 @@ export default function MovieRetrieveModal() {
 
   // Credits start.
 
-  const creditsResponse = useMovies<SimpleResponse<IMovieCreditsResponse>>({
+  const creditsResponse = useMovies<IMovieCreditsResponse>({
     key: "movieCredits",
     query: QUERY_MOVIE_CREDITS,
     variables: { movieId: Number(movieSelectedId) },
   });
 
   useEffect(() => {
-    if (creditsResponse?.ok) {
-      setCredits(creditsResponse.data);
-      console.log("credits", creditsResponse.data);
+    if (creditsResponse) {
+      setCredits(creditsResponse);
+      console.log("credits", creditsResponse);
     }
   }, [creditsResponse]);
 
@@ -120,15 +133,15 @@ export default function MovieRetrieveModal() {
 
   // Similar start.
 
-  const similarsResponse = useMovies<SimpleResponse<IMovieSimilarsResponse>>({
+  const similarsResponse = useMovies<IMovieSimilarsResponse>({
     key: "movieSimilars",
     query: QUERY_MOVIE_SIMILARS,
     variables: { movieId: Number(movieSelectedId) },
   });
 
   useEffect(() => {
-    if (similarsResponse?.ok) {
-      setSimilars(similarsResponse.data);
+    if (similarsResponse) {
+      setSimilars(similarsResponse);
     }
   }, [similarsResponse]);
 
@@ -136,66 +149,76 @@ export default function MovieRetrieveModal() {
 
   // Recommendations start.
 
-  const recommendationsResponse = useMovies<
-    SimpleResponse<IMovieRecommendationsResponse>
-  >({
+  const recommendationsResponse = useMovies<IMovieRecommendationsResponse>({
     key: "movieRecommendations",
     query: QUERY_MOVIE_RECOMMENDATIONS,
     variables: { movieId: Number(movieSelectedId) },
   });
 
   useEffect(() => {
-    if (recommendationsResponse?.ok) {
-      setRecommendations(recommendationsResponse?.data);
-      console.log("recommendations", recommendationsResponse?.data);
+    if (recommendationsResponse) {
+      setRecommendations(recommendationsResponse);
+      console.log("recommendations", recommendationsResponse);
     }
   }, [recommendationsResponse]);
 
   // Recommendations end.
 
+  // Observers.
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
   return (
     <Overlay onClick={onOverlayClick}>
-      <Container
-        initial={{ y: -100, rotateZ: 5, scale: 0.3 }}
-        animate={{ y: 0, rotateZ: 0, scale: 1 }}
-        exit={{ y: 100 }}
-      >
-        {/* Close button */}
-        <CircleCloseButton onCloseClick={onCloseClick} />
+      <AnimatePresence>
+        <Container
+          layoutId={movieSelectedId + ""}
+          variants={ContainerVariants}
+          initial="idle"
+          animate="in"
+        >
+          {/* Close button */}
+          <CircleCloseButton onCloseClick={onCloseClick} />
 
-        {/* Movie thumbnail */}
-        {movie ? (
-          <MovieRetrieveModalThumbnail
-            title={movie.title}
-            posterPath={movie.backdrop_path}
-          />
-        ) : (
-          <MovieLoader />
-        )}
+          {/* Movie thumbnail */}
+          {movie ? (
+            <MovieRetrieveModalThumbnail
+              title={movie.title}
+              posterPath={movie.backdrop_path}
+            />
+          ) : (
+            <MovieLoader />
+          )}
 
-        {/* Description */}
-        {movie && credits ? (
-          <MovieRetrieveModalDescription movie={movie} casts={credits.cast} />
-        ) : (
-          <MovieLoader />
-        )}
+          {/* Description */}
+          {movie && credits ? (
+            <MovieRetrieveModalDescription movie={movie} casts={credits.cast} />
+          ) : (
+            <MovieLoader />
+          )}
 
-        {/* Similars */}
-        {similars ? (
-          <MovieRetrieveModalSimilars similars={similars} />
-        ) : (
-          <MovieLoader />
-        )}
+          {/* Similars */}
+          {similars ? (
+            <MovieRetrieveModalSimilars similars={similars} />
+          ) : (
+            <MovieLoader />
+          )}
 
-        {/* Recommendations */}
-        {recommendations ? (
-          <MovieRetrieveModalRecommendations
-            recommendations={recommendations.results}
-          />
-        ) : (
-          <MovieLoader />
-        )}
-      </Container>
+          {/* Recommendations */}
+          {recommendations ? (
+            <MovieRetrieveModalRecommendations
+              recommendations={recommendations.results}
+            />
+          ) : (
+            <MovieLoader />
+          )}
+        </Container>
+      </AnimatePresence>
     </Overlay>
   );
 }

@@ -1,7 +1,5 @@
-import { useEffect } from "react";
-import { QueryResult, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { DocumentNode } from "graphql";
-import { QUERY_MOVIE_TOP_RATED } from "../../api/graphql/movies/movieTopRated";
 
 interface UseMovieProps {
   key: string;
@@ -14,22 +12,18 @@ export default function useMovies<T>({
   query,
   variables,
 }: UseMovieProps): T | null {
-  const {
-    loading: responseLoading,
-    error: responseError,
-    data: responseData,
-  } = useQuery(query, {
+  const { loading, error, data } = useQuery(query, {
     ...(variables && { variables }),
   });
 
-  if (!responseData) return null;
+  if (loading && !data) return null;
 
   // There is an error?
-  if (responseError) {
-    console.error("[useMovies]", responseError);
+  if (error) {
+    console.error("[useMovies]", error);
     return null;
   }
 
   // Return response data.
-  return responseData[key];
+  return data[key].data;
 }

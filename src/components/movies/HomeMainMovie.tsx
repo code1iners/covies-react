@@ -83,6 +83,8 @@ function HomeMainMovie({
   const setMovieSelectedId = useSetRecoilState(ATOM_MOVIE_SELECTED_ID);
 
   const onRetrieveClick = () => {
+    console.log(id);
+
     setMovieRetrieveModalIsShowing(true);
     setMovieSelectedId(id);
   };

@@ -5,21 +5,17 @@ import {
   QUERY_MOVIE_TOP_RATED,
   QUERY_MOVIE_TOP_RATED_KEY,
 } from "../api/graphql/movies/movieTopRated";
-import { ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING } from "../atoms/movies/atoms.movies.modals";
 import MovieRetrieveModal from "../components/modals/movies/retrieves/MovieRetrieveModal";
 import HomeMainMovie from "../components/movies/HomeMainMovie";
-import useMovie from "../hooks/movies/useMovies";
+import useMovies from "../hooks/movies/useMovies";
 import useRandom from "../hooks/useRandom";
-import ErrorMessageModal from "../modals/ErrorMessageModal";
 import {
   MovieTopRatedResult,
   MovieTopRatedResponse,
 } from "../types/movies/movies.topRated";
-import { SimpleResponse } from "../types/shared/shared";
-import { makeContentImagePath } from "../utils/imageUtils";
-import { generator } from "@ce1pers/use-page";
-import { IGeneratePageData, IGenerateResult } from "@ce1pers/use-page/types";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import HorizontalContents from "../components/home/HorizontalContents";
+import { ATOM_MOVIE_SELECTED_ID } from "../atoms/movies/atoms.movies.common";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -150,126 +146,43 @@ const TopRatedBoxVariants = {
 function HomePage() {
   const { getRandomly } = useRandom();
 
-  const movieRetrieveModalIsShowing = useRecoilValue(
-    ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING
-  );
+  // Data.
 
-  // Top rated start.
-
-  const [topRated, setTopRated] = useState<MovieTopRatedResult[]>([]);
-  const [pagedTopRated, setPagedTopRated] = useState<IGeneratePageData[]>();
-  const [randomlyTopRatedData, setRandomlyTopRatedData] =
-    useState<MovieTopRatedResult>();
-  const [topRatedIndex, setTopRatedIndex] = useState(0);
-  const [isLeaving, setIsLeaving] = useState(false);
-
-  const topRatedResponse = useMovie<SimpleResponse<MovieTopRatedResponse>>({
+  const topRatedResponse = useMovies<MovieTopRatedResponse>({
     key: QUERY_MOVIE_TOP_RATED_KEY,
     query: QUERY_MOVIE_TOP_RATED,
   });
 
-  useEffect(() => {
-    if (topRatedResponse?.ok) {
-      setTopRated(topRatedResponse.data!.results);
-      setRandomlyTopRatedData(getRandomly(topRatedResponse.data!.results));
+  console.log(topRatedResponse);
 
-      const { generate } = generator({
-        take: 5,
-        data: topRatedResponse.data!.results,
-      });
-      const pagedTopRated = generate();
-      setPagedTopRated(pagedTopRated.pages);
+  // States.
+
+  const [topRatedMovies, setTopRatedMovies] = useState<MovieTopRatedResponse>();
+  const [randomTopRatedMovie, setRandomTopRatedMovie] =
+    useState<MovieTopRatedResult>();
+
+  const movieRetrieveModalIsShowing = useRecoilValue(ATOM_MOVIE_SELECTED_ID);
+
+  // Observers.
+
+  useEffect(() => {
+    if (topRatedResponse) {
+      setTopRatedMovies(topRatedResponse);
+      setRandomTopRatedMovie(getRandomly(topRatedResponse.results));
     }
   }, [topRatedResponse]);
 
-  const goNext = () => {
-    if (isLeaving) return;
-
-    if (pagedTopRated && pagedTopRated.length - 1 > topRatedIndex) {
-      setIsLeaving(true);
-      setTopRatedIndex((prev) => prev + 1);
-    }
-  };
-
-  const goPrevious = () => {
-    if (isLeaving) return;
-
-    if (pagedTopRated && topRatedIndex > 0) {
-      setIsLeaving(true);
-      setTopRatedIndex((prev) => prev - 1);
-    }
-  };
-
-  const onExitComplete = () => {
-    setIsLeaving(false);
-  };
-
-  // Top rated end.
-
   return (
     <Container>
-      {/* Head */}
-
       {/* Home's main content */}
-      {randomlyTopRatedData ? (
-        <HomeMainMovie {...randomlyTopRatedData} />
-      ) : (
-        <ErrorMessageModal message={topRatedResponse?.error?.message} />
-      )}
+      <HomeMainMovie {...randomTopRatedMovie} />
 
       {/* Top rated */}
-      <TopRatedContainer>
-        <TopRatedTitle>최고 평점을 영화</TopRatedTitle>
+      <HorizontalContents
+        title="최고 평점 영화"
+        list={topRatedMovies?.results}
+      />
 
-        <TopRatedListWrapper>
-          <PreviousArrow onClick={goPrevious}>{"<"}</PreviousArrow>
-          <TopRatedRowWrapper>
-            {pagedTopRated ? (
-              <AnimatePresence initial={false} onExitComplete={onExitComplete}>
-                (
-                <TopRatedRow
-                  key={topRatedIndex}
-                  variants={TopRatedRowVariants}
-                  initial="invisible"
-                  animate="visible"
-                  exit="exit"
-                  transition={{
-                    type: "tween",
-                    duration: 1,
-                  }}
-                >
-                  {pagedTopRated[topRatedIndex].data.map((item, index) => (
-                    <TopRatedItemBox
-                      key={item.id + ""}
-                      variants={TopRatedBoxVariants}
-                      initial="normal"
-                      whileHover="hover"
-                      transition={{
-                        duration: 0,
-                      }}
-                    >
-                      <TopRatedThumbnail
-                        imagePath={makeContentImagePath(
-                          item.poster_path,
-                          "w500"
-                        )}
-                      />
-                      <TopRatedTextBox>
-                        <TopRatedItemTitle>{item.title}</TopRatedItemTitle>
-                        <TopRatedItemAverage>
-                          {item.vote_average}
-                        </TopRatedItemAverage>
-                      </TopRatedTextBox>
-                    </TopRatedItemBox>
-                  ))}
-                </TopRatedRow>
-                ){" "}
-              </AnimatePresence>
-            ) : null}
-          </TopRatedRowWrapper>
-          <NextArrow onClick={goNext}>{">"}</NextArrow>
-        </TopRatedListWrapper>
-      </TopRatedContainer>
       {/* Modals */}
       {movieRetrieveModalIsShowing ? <MovieRetrieveModal /> : null}
     </Container>
