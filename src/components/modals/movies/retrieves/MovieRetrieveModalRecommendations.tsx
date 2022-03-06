@@ -22,6 +22,7 @@ export default function MovieRetrieveModalRecommendations({
           <ContentCard
             key={index}
             index={index}
+            id={recommendation.id}
             overview={recommendation.overview}
             title={recommendation.title}
             posterPath={recommendation.poster_path}

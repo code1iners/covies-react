@@ -70,8 +70,6 @@ function HomePage() {
     query: QUERY_MOVIE_NOW_PLAYING,
   });
 
-  console.log(nowPlayingMoviesResponse);
-
   // console.log(latestResponse);
 
   // States.

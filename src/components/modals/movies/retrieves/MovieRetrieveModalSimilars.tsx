@@ -27,6 +27,7 @@ export default function MovieRetrieveModalSimilars({
           <ContentCard
             key={index}
             index={index}
+            id={result.id}
             overview={result.overview}
             title={result.title}
             posterPath={result.poster_path}

@@ -6,6 +6,7 @@ import TvPage from "./pages/TvPage";
 import SearchPage from "./pages/SearchPage";
 import MainHeader from "./components/headers/MainHeader";
 import MoviePage from "./pages/movies/MoviePage";
+import Footer from "./components/footers";
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
         <Route path="tv" element={<TvPage />} />
         <Route path="search" element={<SearchPage />} />
       </Routes>
+
+      <Footer />
     </Router>
   );
 }

@@ -43,7 +43,7 @@ const Arrow = styled.div`
   position: relative;
   cursor: pointer;
   border: 1px solid gray;
-  border-radius: 5px;
+  border-radius: 50%;
   padding: 10px 15px;
   z-index: 2;
   transition: 0.2s ease-in-out;
@@ -59,6 +59,7 @@ const Arrow = styled.div`
   &:hover {
     border-color: white;
     color: ${(props) => props.theme.colors.sexyRed};
+    border-radius: 5px;
   }
 `;
 

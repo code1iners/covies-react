@@ -1,7 +1,9 @@
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import { ATOM_MOVIE_SELECTED_ID } from "../../atoms/movies/atoms.movies.common";
 
 const MovieSimilarItemContainer = styled.div`
   border-radius: 2px;
@@ -76,6 +78,7 @@ const MovieSimilarOverview = styled.p`
 `;
 
 interface IContentCardProps {
+  id: number;
   index: number;
   posterPath: string;
   voteAverage: number;
@@ -85,6 +88,7 @@ interface IContentCardProps {
 }
 
 export default function ContentCard({
+  id,
   index,
   posterPath,
   voteAverage,
@@ -92,8 +96,17 @@ export default function ContentCard({
   title,
   overview,
 }: IContentCardProps) {
+  // Hooks.
+  const setMovieId = useSetRecoilState(ATOM_MOVIE_SELECTED_ID);
+
+  // Handlers.
+  const onContentClick = () => {
+    setMovieId(undefined);
+    setTimeout(() => setMovieId(id), 1);
+  };
+
   return (
-    <MovieSimilarItemContainer>
+    <MovieSimilarItemContainer onClick={onContentClick}>
       <MovieSimilarItemWrapper
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{
