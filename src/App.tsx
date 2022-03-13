@@ -9,7 +9,7 @@ import MoviePage from "./pages/movies/MoviePage";
 import Footer from "./components/footers";
 
 function App() {
-  console.log("hello", process.env.ENV_NODE);
+  console.log("hello", process.env.NODE_NEV);
   return (
     <Router>
       <MainHeader />
