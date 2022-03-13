@@ -162,7 +162,7 @@ function MainHeader() {
         </Links> */}
       </Column>
 
-      <Column>
+      {/* <Column>
         <SearchForm onSubmit={onSearchSubmit}>
           <motion.svg
             onClick={onSearchClick}
@@ -184,7 +184,7 @@ function MainHeader() {
             placeholder="Search movie or tv."
           />
         </SearchForm>
-      </Column>
+      </Column> */}
     </Navigation>
   );
 }

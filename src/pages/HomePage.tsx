@@ -43,6 +43,7 @@ const Container = styled.div`
 
 function HomePage() {
   const { getRandomly } = useRandom();
+  console.log(getRandomly);
 
   // Data.
 

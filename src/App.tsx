@@ -9,17 +9,18 @@ import MoviePage from "./pages/movies/MoviePage";
 import Footer from "./components/footers";
 
 function App() {
+  console.log("hello", process.env.ENV_NODE);
   return (
     <Router>
       <MainHeader />
 
       <Routes>
-        <Route path="" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
 
-        <Route path="movies" element={<MoviePage />} />
+        <Route path="/movies" element={<MoviePage />} />
 
-        <Route path="tv" element={<TvPage />} />
-        <Route path="search" element={<SearchPage />} />
+        <Route path="/tv" element={<TvPage />} />
+        <Route path="/search" element={<SearchPage />} />
       </Routes>
 
       <Footer />
