@@ -6,7 +6,6 @@ import { ATOM_MOVIE_SELECTED_ID } from "../../../../atoms/movies/atoms.movies.co
 import { ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING } from "../../../../atoms/movies/atoms.movies.modals";
 import useMovies from "../../../../hooks/movies/useMovies";
 import { IMovieDetailResult } from "../../../../types/movies/movies.detail";
-import { SimpleResponse } from "../../../../types/shared/shared";
 import CircleCloseButton from "../../../buttons/CircleCloseButton";
 import MovieLoader from "../../../loadings/MovieLoader";
 import { QUERY_MOVIE_CREDITS } from "../../../../api/graphql/movies/movieCredits";

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { motion, useAnimation, useViewportScroll } from "framer-motion";
-import { Link, PathMatch, useMatch } from "react-router-dom";
+import { Link, PathMatch } from "react-router-dom";
 import { FormEvent, useEffect, useState } from "react";
 
 const Navigation = styled(motion.nav)`
@@ -40,40 +40,6 @@ const Logo = styled(motion.button)<ILogoProps>`
   &:hover {
     color: ${(props) => props.theme.colors.sexyRed};
   }
-`;
-
-const Links = styled.ul`
-  display: flex;
-  align-items: center;
-  grid-gap: 30px;
-  margin-left: 40px;
-`;
-
-const LinkItem = styled.li`
-  list-style: none;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 300;
-  text-align: center;
-  transition: 0.2s ease-in-out;
-  position: relative;
-  a {
-    display: flex;
-    justify-content: center;
-  }
-  &:hover {
-    color: ${(props) => props.theme.colors.sexyRed};
-    transform: scale(1.05);
-  }
-`;
-
-const LinkItemIndicator = styled(motion.span)`
-  width: 100%;
-  height: 1px;
-  border-radius: 5px;
-  position: absolute;
-  bottom: -5px;
-  background-color: ${(props) => props.theme.colors.sexyRed};
 `;
 
 const SearchForm = styled.form`
@@ -117,9 +83,6 @@ const navVariants = {
 function MainHeader() {
   const [isSearchOpened, setIsSearchOpened] = useState(false);
 
-  const isHome = useMatch("/");
-  const isMovie = useMatch("/movies/*");
-  const isTv = useMatch("/tv/*");
   const navAnimation = useAnimation();
 
   const onSearchClick = () => setIsSearchOpened((previous) => !previous);
@@ -145,21 +108,6 @@ function MainHeader() {
         <Link to="/">
           <Logo>Covies</Logo>
         </Link>
-
-        {/* Menu */}
-        {/* <Links>
-          <LinkItem>
-            <Link to="movies">
-              영화
-              {isMovie ? <LinkItemIndicator layoutId="indicator" /> : null}
-            </Link>
-          </LinkItem>
-          <LinkItem>
-            <Link to="tv">
-              TV {isTv ? <LinkItemIndicator layoutId="indicator" /> : null}
-            </Link>
-          </LinkItem>
-        </Links> */}
       </Column>
 
       <Column>

@@ -8,10 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import styled from "styled-components";
 import { IMovieCreditsCast } from "../../../../types/movies/movies.credits";
-import {
-  IMovieDetailGenreProps,
-  IMovieDetailResult,
-} from "../../../../types/movies/movies.detail";
+import { IMovieDetailResult } from "../../../../types/movies/movies.detail";
 
 const MovieDescriptionContainer = styled.div`
   display: flex;
@@ -42,7 +39,7 @@ const MovieDescriptionTag = styled.li`
     transform: scale(1.1);
   }
 `;
-const MovieDescriptionMessage = styled.span``;
+
 const MovieDescriptionOverview = styled.span`
   font-weight: lighter;
   font-size: 0.9rem;

@@ -78,8 +78,9 @@ function HomeMainMovie({
   poster_path,
   id,
 }: MovieTopRatedResult) {
-  const [movieRetrieveModalIsShowing, setMovieRetrieveModalIsShowing] =
-    useRecoilState(ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING);
+  const setMovieRetrieveModalIsShowing = useSetRecoilState(
+    ATOM_MOVIE_RETRIEVE_MODAL_IS_SHOWING
+  );
   const setMovieSelectedId = useSetRecoilState(ATOM_MOVIE_SELECTED_ID);
 
   const onRetrieveClick = () => {
